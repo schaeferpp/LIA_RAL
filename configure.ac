@@ -17,10 +17,10 @@ AC_ARG_ENABLE(debug,
                 [  --enable-debug         compile LIA_RAL with debug information [[default=no]] ], 
                 enable_optimize=$enableval, enable_optimize=no)
 if test "$enable_optimize" = "yes"; then 
-        CXXFLAGS="-g -Wall"
+        CXXFLAGS="-ggdb -Wall"
         AC_SUBST(DEBUG,"_debug")
 else
-        CXXFLAGS="-O3 -ffast-math"
+        CXXFLAGS="-O3 -ggdb -ffast-math"
         AC_SUBST(DEBUG,"")
 fi
 
