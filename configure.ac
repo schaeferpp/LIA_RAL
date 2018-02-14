@@ -12,16 +12,29 @@ AC_SUBST(OS,`uname -s`)
 AC_SUBST(ARCH,`uname -m`)
 AC_SUBST(ALIZE_PATH)
 
+AC_ARG_ENABLE(stacktrace,
+              [  --enable-stacktrace enable backward.hpp stacktrace (will probably only work on linux [[default=yes]] ]
+              enable_stacktrace=$enableval, enable_stacktrace=yes)
+
 # enable debug compilation
 AC_ARG_ENABLE(debug, 
                 [  --enable-debug         compile LIA_RAL with debug information [[default=no]] ], 
                 enable_optimize=$enableval, enable_optimize=no)
 if test "$enable_optimize" = "yes"; then 
-        CXXFLAGS="-ggdb -Wall"
+        CXXFLAGS="$CXXFLAGS -ggdb -Wall"
         AC_SUBST(DEBUG,"_debug")
 else
-        CXXFLAGS="-O3 -ggdb -ffast-math"
+        CXXFLAGS="$CXXFLAGS -O3 -ggdb -ffast-math"
         AC_SUBST(DEBUG,"")
+fi
+
+#Enable stacktrace
+if test "$enable_stacktrace" = "yes"; then
+    AC_MSG_NOTICE("Stacktrace enabled")
+    CPPFLAGS="$CPPFLAGS -DBACKWARD_HAS_BFD=1"
+    LIBS="$LIBS -lbfd -ldl"
+else
+    AC_MSG_NOTICE("Stacktrace disabled")
 fi
 
 # link to LAPACK
